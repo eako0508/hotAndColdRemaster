@@ -32,12 +32,16 @@ export default class Main extends React.Component {
 		}
 	}
 
+	componentDidMount(){
+		this.generator();
+	}
+
 	generator(){
 		
 		let newNum = Math.random();
 		newNum = (newNum*100).toFixed(0);
 		//console.log(newNum);
-		this.setState({winNum:newNum});
+		this.setState({winNum:newNum}, function(){console.log("winning Number: "+this.state.winNum)});
 		//console.log("winning Number: "+this.state.winNum);
 		
 	}
@@ -62,17 +66,18 @@ export default class Main extends React.Component {
 
 	getDiff(inputNum){
 		let diff = Math.abs(this.state.winNum - inputNum);
-		if(diff<10){
+		if(diff<5){
 			this.updateMessage(this.state.msg.hot);
-		} else if(diff<20){
+		} else if(diff<10){
 			this.updateMessage(this.state.msg.kindaHot);
-		} else if(diff<30){
+		} else if(diff<20){
 			this.updateMessage(this.state.msg.warm);
-		} else if(diff<40){
+		} else if(diff<30){
 			this.updateMessage(this.state.msg.lessThanWarm);
-		} else if(diff<50){
+		} else {
 			this.updateMessage(this.state.msg.cold);
 		}
+		//} else if(diff<40){
 	}
 
 	updateMessage(message){
@@ -84,13 +89,13 @@ export default class Main extends React.Component {
 	handleSubmit(e){
 		e.preventDefault();
 		if(!this.state.winStatus){
-			const inputNum = this.state.inputNum;		
+			const inputNum = this.state.inputNum;
 			this.state.triedNumbers.push(inputNum);
 			this.setCounter();
 
 			this.getDiff(inputNum);
 
-			if(inputNum == this.state.winNum) {				
+			if(inputNum == this.state.winNum) {
 				this.setWinStatus(true);
 				this.setMessage(this.state.msg.win);
 			}
@@ -124,7 +129,8 @@ export default class Main extends React.Component {
 		this.generator();
 	}
 
-	render(){		
+	render(){
+		
 		let navSection;
 		if(this.state.headerState){
 			navSection = <What onClick={this.whatDisableHandler}/>;
@@ -149,12 +155,12 @@ export default class Main extends React.Component {
   				value="Finished!"
 			/>;
 		}
-		//let message = "Make your Guess!";
+		
 		return(
 			<div>
 				<header>					
 					{navSection}
-					<h1>HOT or COLD</h1>
+					<h1>HOT and COLD</h1>
 				</header>
 
 				<section className="game">
